@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Cartas Interativas</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f0f0f0;
+            position: relative;
+        }
+        .tangram-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        .cards-grid {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .card {
+            width: 360px;
+            height: 110px;
+            perspective: 1000px;
+            cursor: move;
+            position: absolute;
+            z-index: 10;
+            transition: all 0.2s;
+        }
+        .card.dragging {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .card-front {
+            background-color: #ffffff;
+            z-index: 2;
+        }
+        .card-back {
+            background-color: #e0e0e0;
+            transform: rotateY(180deg);
+        }
+        .card-front img, .card-back img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="tangram-background" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+            <polygon points="0,0 400,400 0,400" fill="#FF6B35" opacity="0.5"/>
+            <polygon points="1200,0 800,400 1200,400" fill="#4ECB71" opacity="0.5"/>
+            <polygon points="600,200 400,400 800,400" fill="#FFD700" opacity="0.5"/>
+            <polygon points="0,400 200,600 0,600" fill="#FF6B35" opacity="0.5"/>
+            <rect x="400" y="400" width="200" height="200" fill="#4ECB71" opacity="0.5"/>
+            <polygon points="1200,400 1000,600 1200,600" fill="#FFD700" opacity="0.5"/>
+            <polygon points="1000,600 800,400 1000,400 1200,600" fill="#FF6B35" opacity="0.5"/>
+        </svg>
+        
+        <div class="cards-grid" id="cardContainer">
+            <!-- Cartas serão geradas dinamicamente via JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Variáveis globais
+        const container = document.getElementById('cardContainer');
+        let currentCardIndex = 0;
+
+        // Função para criar as cartas
+        function createCards() {
+            const cardWidth = 360;
+            const cardHeight = 110;
+            const containerWidth = container.clientWidth;
+            const cols = Math.floor(containerWidth / (cardWidth + 20));
+
+            // Links de imagens com fallback para imagens de placeholder
+            const cardLinks = [
+                {
+                    frontImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhhdX4QjOWWI9yz7H0p3Fo1OUwc_GGJJect4lPIlaJcHl7ridLeUhHS5uxAl7YzNoUq6kTnZsirBikQgikvSsCNi-q3hP0xgKlhYrN0GguHp7s82V-v1i5XTsIx7Yi9UP55LtsaPs39QwC_ZnP6YVMgEf7H_7f7j0Hc2OBNYRSaqYUQ59Xm8UO6uud3keDs/s2000/CARTA-1.png',
+                    backImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhSOvZiQIGJe-Q8h2ObdTsuYCp7yLF5J24oWatbaEKF705Cr_ueLn4Yyw3NFPgWbnmUJdXWK9zNdMUbwS_OUmgJVyNR7zMBtd1MFX7AlOvAuUdSFaJPsMAKahFJ4xNFXAorNs0sMJeM7SrJAntlpPQRrfAQqfJsgQhEQCWiotPAEsis-G8gk4U2ecHfXs_R/s2000/8.png'
+                },
+                {
+                    frontImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrNLc47vD7Rpl3v-F1bn-hkq5Pb0QH6mLx28w-f4GjhQQhTAG3DAttsdqx5fxBsF44F4gqTKKrl9g1l1mTeuvTcdUuF7M8VV9G_vQF0mWmCpQGKW3sGITFo271JUt-twq8dNq6KQCcJ7wZ8R41RihbX8aQRNqDxFmir2o3GX4Ev_0ONL_401u2BYkk77Ij/s2000/CARTA%208.png',
+                    backImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhIIa933IIFioMKwqfxGrCEvm8S60xFK9OY2OaGHcmZ9a5T3MC-00ihLE1Ve34gud81dFs5K7GxmmA_kf1QmivpWWhQ7PYwq5sxj3WaJ-UIutdouQF0NS8DkXcqzsoj_bDVvXyiXfBAORLqhTkabv27h6HpMtf9sVXNoJPxp0pnx3vLrp9ubibWCMnT6WOC/s2000/7.png'
+                },
+                {
+                    frontImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjtJn4rH6z1cAR9WDOuNIw32p9Z8uRdUtrn_GRQi-y1Q9jEwKmh2EfOdj2LnUoD9u9HMQFld8p3Kjn5GzdZodq4hnDMAznMhkPwQkBlYhTCRtyWwp0vWa2oRBIlPiZsostAUzKv41xd5gg_BkcWz-sz3iG7NSiqP4SNy97kCv1xTSx3vdhFg-I_OnPN3lbY/s2000/CARTA%207.png',
+                    backImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg7n0KChhl8DAxQR65xQNc-dhBOfaVk3Hki3x_sCc6fJFvBuC0FpgitPkEiWiMGgU3AVr_fL_uSoWZdXy1ev3lTYbMPoZ4nfX5omcmRXPPs7_bcelnXsxV2fTZtcf-PaKjTYKYdyRS2jC3WopX69Wbo5vWYEBRHspTMR_tWghcHVq75M8HbKwiQnfpJhZVV/s2000/5.png'
+                },
+                {
+                    frontImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7I7Vuse35eEgWYNgcsCklQnSiXMMBmYxBhGoNc3Ivx0J5BkEpE9FbYx93ojatGc45wWMcW1lDpPM8u-wJCLdwKVj9tQp7vt20QL_MfqmZEtiErS6DnmxIEX1nrtH6fDxvO86lYaiJ-2rUdZ62vIPr4FT0vyHP3fGx8HUHm7WlZ-VSlUv4q9_ueg673mM-/s2000/CARTA%206.png',
+                    backImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi4J5BAM8vsDgvSLiy1RROZQEnqXjcd2L48WN9h_yrkqbvjCaV__pNYqPw6b_D9sdgy6O2XbsiHp1-K_cZOEwEuRDsL4FFTy0CzQCfpcn5f_Zi7ECB22e90cy2eAKTfAFL6U_6nhr2phKm_Twvmy4uzibOOu1HV2VM24W-BP329Obt5NdU0Ey-bSku4hwX7/s2000/6.png'
+                },
+                {
+                    frontImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhB_qFlEuyy_xHJ6QKJw38ssWEZfgV9utip4cLWOtq4KyHIL9eDL_5A3aAJq7Fl18mFtbtZEP0S1VBnUe8_cibRHlrFVRlAlpnTmtXVOazIsOj_HFhuaJf3eJ68vgsxaiTzbyPjSJx5BFIGm033no70kAzpEMYmENmJc24YMC2q2p8eZOHYmnRg0fPtfLN-/s2000/CARTA-1.png',
+                    backImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi9d8Et2goRFZ3N2AfaRVkj8dSKORg42SbBQRQbmal-Up8Ac0MS_TKkYul76j9He85iqPsPJ8sZpqZO-k7pgm0IQcE7CkTgxfydDjM_R5HEc0JxOfw6ZorGI7OArPdQG5JugxK5qUZ-RcEY7WiDMBlJvyzOMOPQonMZY7jcHV1vwQCo6_vJm1HNrtxJnrfV/s2000/3.png'
+                },
+                {
+                    frontImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgmHaEqZO14_0miGjCiU1j35MOdxlmTGiaUi-FG8yJbQzDEUxiPfhWxkQBSEOSlWfAKhursRxDJO1gfbezGZ-JVKF40dNtUfKqmuv9opAHtB-zgU-ye5Zale1-3mGKzkJQPxJ_f_SVcPbcN7K-HWfR0ZOoiAhnetssEJjF5heHuzEjKRyrMIHq3z6n-srXB/s2000/CARTA%208.png',
+                    backImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj0l8NP994klpsH-ut2yH9o_mtqGaOEOmLDpvR5DVqFKi8kPpkO1UUSyfFMIlTUULtsxXN0uzFAPlQIqRQu5QcfwTEmDpVOqf1zILr08KbZt5c1ujmzgtyNxX9fH3Z71EB1V4gkLzaiG-k6NtNsD5zVPwzHEnIn7-zXc4O4pKsmsXlRxXGSKkzRf5fmCJzv/s2000/4.png'
+                },
+                {
+                    frontImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7I7Vuse35eEgWYNgcsCklQnSiXMMBmYxBhGoNc3Ivx0J5BkEpE9FbYx93ojatGc45wWMcW1lDpPM8u-wJCLdwKVj9tQp7vt20QL_MfqmZEtiErS6DnmxIEX1nrtH6fDxvO86lYaiJ-2rUdZ62vIPr4FT0vyHP3fGx8HUHm7WlZ-VSlUv4q9_ueg673mM-/s2000/CARTA%206.png',
+                    backImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgYpV7ERvSqT411UWG_8WDCR_D0e_mMQ7FrP2pszWp1wrKhU5_9zwwq_BvuB4tjV3J1mLnbQmT7XEbAa1VnUEF1dJyB-lc0uY0aT203hY_sgxiCAq05Up5wIrpoevVpdu8dc9x3IAj2oFOfhavUL_4N_izR8_pMpyUZHKuvq4Zr4xUjAJytUPr2oulNNZ8P/s2000/2.png'
+                },
+                {
+                    frontImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgpYEBmuoV3d1nWm11r-9orqx27tKPl_WR-czDKRvrIVmH3kbVxnGRbKO-qA1sGHcwKMreC6InbYJGT1vI8JG6zb6aY9pZTDGGGF_Sc8OliVcw4APVIC-bjdvCoplx4us513xVFvt30LVWyFsvH9ekFRNrs2_aLPpqslkwgihZvQjZafUct-O6PEri4onN1/s2000/CARTA%203.png',
+                    backImg: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgg_oKdjSoxG4ubkqwsQxJo8_9AqAg7zjOe2D9X1wQYTkRWnkp6Jw7q7jclAutuyXI0MKy8PmHrmVVCmGua2HGYJsdmB3ddg7PVbaJZjuMUeNce3FygKbJH3Uzq4FKdsQdpZTN9FoKhH2MNwH8Jk_cFdeVvNBWFcG6_1QVCgJ3HWUl7rppKSVksl5gCyF-8/s2000/1.png'
+                }
+            ];
+
+            for (let i = 0; i < 8; i++) {
+                const row = Math.floor(i / cols);
+                const col = i % cols;
+
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                cardDiv.style.left = `${col * (cardWidth + 20)}px`;
+                cardDiv.style.top = `${row * (cardHeight + 20)}px`;
+                
+                const cardInner = document.createElement('div');
+                cardInner.className = 'card-inner';
+                
+                const cardFront = document.createElement('div');
+                cardFront.className = 'card-front';
+                
+                const cardBack = document.createElement('div');
+                cardBack.className = 'card-back';
+                
+                const frontImg = document.createElement('img');
+                frontImg.src = cardLinks[i].frontImg;
+                frontImg.alt = `Carta ${i + 1} Frente`;
+                
+                const backImg = document.createElement('img');
+                backImg.src = cardLinks[i].backImg;
+                backImg.alt = `Carta ${i + 1} Verso`;
+                
+                cardFront.appendChild(frontImg);
+                cardBack.appendChild(backImg);
+                
+                cardInner.appendChild(cardFront);
+                cardInner.appendChild(cardBack);
+                
+                cardDiv.appendChild(cardInner);
+
+                // Evento de clique para girar a carta
+                cardDiv.addEventListener('click', () => {
+                    cardDiv.classList.toggle('flipped');
+                });
+                
+                // Eventos de arraste
+                cardDiv.addEventListener('mousedown', startDragging);
+                
+                container.appendChild(cardDiv);
+            }
+        }
+
+        // Variáveis para controle de arraste
+        let isDragging = false;
+        let currentCard = null;
+        let startX, startY, offsetX, offsetY;
+
+        // Função para iniciar o arraste
+        function startDragging(e) {
+            e.preventDefault();
+
+            currentCard = e.currentTarget;
+            currentCard.classList.add('dragging');
+
+            const rect = currentCard.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDragging);
+
+            // Define o índice da carta atual
+            currentCardIndex = Array.from(container.children).indexOf(currentCard);
+        }
+
+        // Função de arraste
+        function drag(e) {
+            if (!currentCard) return;
+
+            const containerRect = container.getBoundingClientRect();
+
+            let newX = e.clientX - containerRect.left - offsetX;
+            let newY = e.clientY - containerRect.top - offsetY;
+
+            newX = Math.max(0, Math.min(newX, containerRect.width - currentCard.offsetWidth));
+            newY = Math.max(0, Math.min(newY, containerRect.height - currentCard.offsetHeight));
+
+            currentCard.style.left = `${newX}px`;
+            currentCard.style.top = `${newY}px`;
+        }
+
+        // Função para parar o arraste
+        function stopDragging() {
+            if (currentCard) {
+                currentCard.classList.remove('dragging');
+            }
+
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDragging);
+            
+            currentCard = null;
+        }
+
+        // Inicialização
+        createCards();
+
+        // Reposiciona cartas se o tamanho da janela mudar
+        window.addEventListener('resize', () => {
+            const cards = container.getElementsByClassName('card');
+            const containerWidth = container.clientWidth;
+            const cardWidth = 360;
+            const cardHeight = 110;
+            const cols = Math.floor(containerWidth / (cardWidth + 20));
+
+            for (let i = 0; i < cards.length; i++) {
+                const card = cards[i];
+                const row = Math.floor(i / cols);
+                const col = i % cols;
+
+                card.style.left = `${col * (cardWidth + 20)}px`;
+                card.style.top = `${row * (cardHeight + 20)}px`;
+            }
+        });
+    </script>
+</body>
+</html>
