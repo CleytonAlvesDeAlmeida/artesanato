@@ -33,6 +33,9 @@ main h2 {
   margin-top: 2rem;
   font-family: 'Playfair Display', serif;
 }
+h4{
+  color: #8e2a2a;
+}
 
 ul {
   list-style: disc;
