@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Busca o texto externo
       try {
-        const resposta = await fetch(`Texto.txt`);
+        const resposta = await fetch(`../Texto.txt`);
         if (!resposta.ok) throw new Error("Erro ao carregar texto.");
         const texto = await resposta.text();
 
