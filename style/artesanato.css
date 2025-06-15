@@ -128,3 +128,18 @@ span {
   font-size: 0.95rem;
   color: #444;
 }
+ul{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+li{
+    list-style: none;
+    text-decoration-line: none;
+}
+#home {
+  position: relative;
+  left: -20px;
+}
