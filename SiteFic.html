@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrição - FIC 2026</title>
+  <link rel="stylesheet" href="Estilo.css">
+
+  <!--fonte1-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  <!--fonte2-->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+  <!--icone-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!--Estilo no inicio da pagina-->
+    <header id="Topo">
+      <!--Circulo design-->
+      <div id="circulo"></div>
+      <!--Garoto png transparente-->
+      <img id="introducao"src="Garoto1(transparente).png">
+      <!--FIC com as primeiras letras coloridas-->
+      <h1 id="f"><F>F</F>eira de</h1>
+      <h1 id="i"><ii>I</ii>novação e</h1>
+      <h1 id="c"><C>C</C>riatividade</h1>
+      <h1 id="ano">2026</h1>
+    </header>
+    <!--Formulário-->
+    <div id="Formulario">
+      <!--Titulo do Formulário-->
+      <h1>Formulário</h1>
+      <!--Formulário-->
+      <form>
+      <!--Nome-->
+      <label for="Nome">Informe seu nome completo:</label>
+      <!--text (entrada de texto linhas unica)-->
+      <input type="text" id="Nome" name="Nome" placeholder="Ex.: Lucas Santana paris"required>
+
+      <!--Idade-->
+      <label for="Idade"> Informe sua idade:</label>
+      <!--number (entrada de dados tipo numero)-->
+      <input type="number" id="Idade" name="Idade" placeholder="Ex.: 18" required>
+
+      <!--Email-->
+      <label for="E-mail">Informe seu E-mail:</label>
+      <!--email (entrada de dados tipo Email)-->
+      <input type="email" id="E-mail" name="E-mail" placeholder="Ex.: Lucasparis@gmail.com" required>
+      <br />
+
+      <!--participação (menu seleciomavel apenas uma opição)-->
+      <label for="participacao">Qual sua participação</label>
+      <!--Seleção-->
+      <select id="participacao" name="participacao" required>
+        <!--Opições do menu (total 3)-->
+        <option value="">Selecine a sua participação</option>
+      <option value="1">Palestrante</option>
+      <option value="2">Ouvinte</option>
+      <option value="3">Expositor</option>
+      </select>
+      <br/>
+
+      <!--Áreas de interesse (menu seleciomavel multiplas opições)-->
+      <label for="interesse">Escolha as áreas de interesse:</label>
+      <select id="interesse" name="interesse" multiple>
+        <!--Opições do menu (total 10)-->
+      <option value="1">Animação Digital</option>
+      <option value="2">Comunicação e Mídias Digitais</option>
+      <option value="3">Eletrônica / Arduino</option>
+      <option value="4">Empreendedorismo / Startups</option>
+      <option value="5">Gamer</option>
+      <option value="6">Impressão 3D</option>
+      <option value="7">Inteligência Artificial</option>
+      <option value="8">Projetos Maker (faça você mesmo)</option>
+      <option value="9">Realidade Virtual / Aumentada</option>
+      <option value="10">Sustentabilidade e Meio Ambiente</option></select>
+
+      <!-- Comentário extra -->
+      <label for="Comentario">Deixe um Comentário</label>
+      <!--textarea (entrada de texto multiplas linhas)-->
+      <textarea id="Comentario" name="Comentario"></textarea>
+
+      <!--Enviar o Formulário-->
+      <input id="enviar" type="submit" value="Enviar" />
+    </select>
+</form>
+</div>
+    <!--Mais sobre a FIC-->
+    <div id="mais">
+      <!--Titulo-->
+      <h1>Saiba mais sobre a <FIC>FIC - 2026</FIC></h1></br>
+      <!--Imagem com texto-->
+      <div class="Fic" id="logo">
+        <img src="Logo.png" alt="Imagem feita por IA">
+        <h3>FIC 2026 – Feira de Inovação e Criatividade</h3>
+        <p>É uma mostra de projetos desenvolvidos por estudantes e criadores independentes que utilizam tecnologia, ciência, arte e design para propor soluções práticas, educativas e sustentáveis. O evento promove a cultura maker, o protagonismo jovem e a experimentação como caminhos para a construção de futuros mais justos, criativos e colaborativos.
+        </p>
+      </div>
+      <div class="Fic" id="garoto">
+        <img src="Garoto1VR.jpg" alt="Imagem feita por IA">
+        <h3>Público-alvo</h3>
+        <p>Estudantes, educadores, makers, pesquisadores independentes, comunidade escolar e pessoas interessadas em tecnologia, inovação, meio ambiente e educação criativa.
+        </p>
+      </div>
+       <div class="Fic" id="garota">
+        <img src="Garota.jpg" alt="Imagem feita por IA">
+        <h3>Temas centrais</h3>
+        <p>Tecnologia educacional;
+            Sustentabilidade e meio ambient;
+            Robótica e programação;
+            Design e prototipagem;
+            Arte, cultura e inovação.
+        </p>
+      </div>
+      <!--Titulo final saber mais-->
+      <h2>Veja um pouco sobre a <Fic>FIC - 2025</FIC></h2>
+      <!--Iframe ou embed emplementar pagina externa na sua-->
+      <iframe src="https://www.youtube.com/embed/KB-Ju4KH-rU" allow="autoplay; fullscreen" 
+    allowfullscreen
+    title="Vídeo YouTube"></iframe>
+    </div>
+    <!--Botão voltar ao topo-->
+    <a href="#Topo">
+      <button id="botao"></i> Voltar ao topo
+      </button>
+  </a>
+    <!--Rodapé--> 
+    <footer>
+      <p>&copy; 2025 Todos os direitos reservados pelo criador.</p>
+      <a href="#Formulario">Sobre</a></li>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,189 @@
+body{
+  overflow-x: hidden;
+  color: #ffffff;
+  background: linear-gradient(to right, #5e2929, #420606);
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+#circulo {
+  width: 225px;
+  height: 225px;
+  border-radius: 50%;
+  background: linear-gradient(to left, #5e2929, #420606);
+  box-shadow: 0 2px 6px #0000009c;
+  position: absolute;
+  top: 100px;
+  left: 70px;
+}
+
+#introducao{
+  width: 200px;
+  height: 250px;
+  position: absolute;
+  top: 90px;
+  left: 80px;
+  border-radius: 20%;
+}
+
+F, ii, C, FIC{
+  color: #8892149c;
+}
+
+#f{
+  position: absolute;
+  top: 325px;
+  left: 50px;
+}
+
+#i{
+  position: absolute;
+  top: 355px;
+  left: 90px;
+}
+#c{
+  position: absolute;
+  top: 390px;
+  left:150px;
+}
+
+#ano{
+  background: #8892149c;
+  border-radius: 3px;
+  text-align: center;
+  color: #420606;
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  position: absolute;
+  top: 430px;
+  left: 220px;
+}
+
+#Formulario {
+  width: 384px;
+  height: 630px;
+  background-color: red;
+  border-radius: 10px;
+  background: #1e1e1e;
+  box-shadow: 0 2px 50px #ff4fd8;
+  position: absolute;
+  top: 520px;
+  left: 0px;
+}
+#Formulario h1{
+  text-align: center;
+  color: #8892149c;
+}
+
+input, select, textarea {
+  width: 94%;
+  padding: 10px;
+  margin-bottom: 25px;
+  border: none;
+  border-radius: 6px;
+  background: #333;
+  color: #fff;
+}
+label{
+  padding: 5px;
+}
+#enviar{
+  background: linear-gradient(to left, #0066cc, #003c6b9c);
+  width: 70px;
+  padding: 10px;
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  text-size-adjust: 100%;
+  position: absolute;
+  top: 580px;
+  left: 150px;
+}
+#mais{
+  gap: 10px;
+  position: absolute;
+  top: 1160px;
+  left: 0px;
+}
+#mais h1{
+  padding: 10px;
+  font-size: 30px;
+}
+.Fic{
+  background: linear-gradient(to left, #0066cc, #003c6b9c);
+  border: -1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 6px #00eaff;
+  width: 100%;
+  height: 180;
+}
+.Fic img{
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+.Fic h3 {
+  text-align: center;
+  font-size: 1.2rem;
+}
+.Fic p {
+  text-align: center;
+  font-size: 16px;
+  color: #000;
+}
+#garoto{
+  position: relative;
+  top: 25px;
+  left: 0px;
+}
+#garota{
+  position: relative;
+  top: 50px;
+  left: 0px;
+}
+#mais h2{
+  position: absolute;
+  top: 1170px;
+  left: 60px;
+}
+#mais iframe{
+  position: relative;
+  border: none;
+  top: 120px;
+  left: 30px;
+  width: 560;
+  height: 315;
+  box-shadow: 0 5px 6px #000;
+}
+/*rodapé*/
+footer {
+  background: linear-gradient(to left, #5e2929, #420606);
+  box-shadow: 0 -3px 6px #000;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  position: relative;
+  top: 2625px;
+}
+footer p {
+  margin: 0;
+}
+#botao {
+  position: absolute;
+  top: 2580px;
+  left: 140px;
+  background: linear-gradient(to left, #0066cc, #003c6b9c);
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: bold;
+  font-style: normal;
+  box-shadow: 0 4px 6px #000;
+}
